@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>向精神薬 Assist</title>
+<style>
+  :root {
+    --bg: #f0f2f5;
+    --surface: #ffffff;
+    --surface2: #f8f9fb;
+    --border: #e2e6ea;
+    --text-primary: #1a2332;
+    --text-secondary: #5a6a7e;
+    --text-muted: #8a9ab0;
+    --accent: #2563b8;
+    --accent-light: #dbeafe;
+    --accent-dark: #1d4ed8;
+    --warn: #d97706;
+    --warn-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+- { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+font-family: -apple-system, ‘Hiragino Kaku Gothic ProN’, ‘Hiragino Sans’, sans-serif;
+background: var(–bg);
+color: var(–text-primary);
+min-height: 100vh;
+padding-bottom: 40px;
+}
+
+header {
+background: #2563b8;
+color: #ffffff;
+padding: 16px 20px 14px;
+position: -webkit-sticky;
+position: sticky;
+top: 0;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(37,99,184,0.3);
+}
+
+header h1 {
+font-size: 17px;
+font-weight: 700;
+letter-spacing: -0.3px;
+color: #ffffff;
+}
+
+header p {
+font-size: 11px;
+opacity: 0.8;
+margin-top: 2px;
+color: #ffffff;
+}
+
+.container {
+max-width: 560px;
+margin: 0 auto;
+padding: 16px 16px;
+}
+
+/* Progress bar */
+.progress-wrap {
+background: var(–surface);
+border-radius: var(–radius);
+padding: 12px 16px;
+margin-bottom: 14px;
+box-shadow: var(–shadow);
+}
+
+.progress-label {
+display: flex;
+justify-content: space-between;
+font-size: 11px;
+color: var(–text-muted);
+margin-bottom: 6px;
+}
+
+.progress-bar {
+height: 4px;
+background: var(–border);
+border-radius: 4px;
+overflow: hidden;
+}
+
+.progress-fill {
+height: 100%;
+background: var(–accent);
+border-radius: 4px;
+transition: width 0.3s ease;
+}
+
+/* Cards */
+.card {
+background: var(–surface);
+border-radius: var(–radius);
+box-shadow: var(–shadow);
+overflow: hidden;
+margin-bottom: 14px;
+animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.card-header {
+padding: 14px 16px 10px;
+border-bottom: 1px solid var(–border);
+background: var(–surface2);
+}
+
+.card-tag {
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 0.8px;
+text-transform: uppercase;
+color: var(–accent);
+margin-bottom: 4px;
+}
+
+.card-question {
+font-size: 16px;
+font-weight: 600;
+line-height: 1.4;
+color: var(–text-primary);
+}
+
+.card-note {
+font-size: 12px;
+color: var(–text-secondary);
+margin-top: 4px;
+line-height: 1.4;
+}
+
+.card-body {
+padding: 12px 16px 14px;
+}
+
+/* Buttons */
+.btn-group {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.btn-option {
+display: flex;
+align-items: center;
+padding: 13px 16px;
+background: var(–surface2);
+border: 1.5px solid var(–border);
+border-radius: var(–radius-sm);
+font-size: 15px;
+font-weight: 500;
+color: var(–text-primary);
+cursor: pointer;
+text-align: left;
+transition: all 0.15s ease;
+width: 100%;
+font-family: inherit;
+line-height: 1.3;
+}
+
+.btn-option:active {
+transform: scale(0.98);
+background: var(–accent-light);
+border-color: var(–accent);
+color: var(–accent-dark);
+}
+
+.btn-option .icon {
+width: 28px;
+height: 28px;
+border-radius: 50%;
+background: var(–border);
+display: flex;
+align-items: center;
+justify-content: center;
+margin-right: 12px;
+flex-shrink: 0;
+font-size: 13px;
+}
+
+/* Symptom grid */
+.symptom-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 8px;
+}
+
+.btn-symptom {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 14px 8px;
+background: var(–surface2);
+border: 1.5px solid var(–border);
+border-radius: var(–radius-sm);
+font-size: 14px;
+font-weight: 600;
+color: var(–text-primary);
+cursor: pointer;
+text-align: center;
+transition: all 0.15s ease;
+font-family: inherit;
+line-height: 1.3;
+}
+
+.btn-symptom .emoji {
+font-size: 22px;
+margin-bottom: 5px;
+}
+
+.btn-symptom:active {
+transform: scale(0.97);
+background: var(–accent-light);
+border-color: var(–accent);
+color: var(–accent-dark);
+}
+
+/* Result cards */
+.result-card {
+border-radius: var(–radius);
+padding: 16px;
+margin-bottom: 12px;
+box-shadow: var(–shadow);
+animation: slideUp 0.25s ease;
+}
+
+.result-card.primary {
+background: var(–accent);
+color: white;
+}
+
+.result-card.warn {
+background: var(–warn-light);
+border: 1.5px solid var(–warn);
+}
+
+.result-card.danger {
+background: var(–danger-light);
+border: 1.5px solid var(–danger);
+}
+
+.result-card.success {
+background: var(–success-light);
+border: 1.5px solid var(–success);
+}
+
+.result-card.purple {
+background: var(–purple-light);
+border: 1.5px solid var(–purple);
+}
+
+.result-card.neutral {
+background: var(–surface);
+border: 1.5px solid var(–border);
+}
+
+.result-label {
+font-size: 10px;
+font-weight: 800;
+letter-spacing: 0.8px;
+text-transform: uppercase;
+margin-bottom: 6px;
+opacity: 0.75;
+}
+
+.result-card.primary .result-label { color: rgba(255,255,255,0.8); }
+.result-card.warn .result-label { color: var(–warn); }
+.result-card.danger .result-label { color: var(–danger); }
+.result-card.success .result-label { color: var(–success); }
+.result-card.purple .result-label { color: var(–purple); }
+.result-card.neutral .result-label { color: var(–text-muted); }
+
+.result-title {
+font-size: 18px;
+font-weight: 700;
+line-height: 1.3;
+margin-bottom: 4px;
+}
+
+.result-card.primary .result-title { color: white; }
+.result-card.warn .result-title { color: #92400e; }
+.result-card.danger .result-title { color: #7f1d1d; }
+.result-card.success .result-title { color: #065f46; }
+.result-card.purple .result-title { color: #4c1d95; }
+
+.result-body {
+font-size: 13px;
+line-height: 1.55;
+margin-top: 6px;
+}
+
+.result-card.primary .result-body { color: rgba(255,255,255,0.9); }
+.result-card.warn .result-body { color: #78350f; }
+.result-card.danger .result-body { color: #7f1d1d; }
+.result-card.success .result-body { color: #064e3b; }
+.result-card.purple .result-body { color: #4c1d95; }
+
+.result-divider {
+height: 1px;
+background: rgba(255,255,255,0.2);
+margin: 10px 0;
+}
+.result-card:not(.primary) .result-divider {
+background: currentColor;
+opacity: 0.15;
+}
+
+.drug-name {
+display: inline-block;
+font-weight: 700;
+font-size: 20px;
+}
+
+.drug-dose {
+font-size: 13px;
+opacity: 0.85;
+margin-top: 2px;
+}
+
+/* Info row */
+.info-row {
+display: flex;
+align-items: flex-start;
+gap: 8px;
+padding: 8px 0;
+border-bottom: 1px solid rgba(0,0,0,0.05);
+font-size: 13px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-row .info-icon { font-size: 15px; flex-shrink: 0; }
+.info-row .info-text { line-height: 1.45; }
+
+/* Reset / Back buttons */
+.btn-footer-row {
+display: flex;
+gap: 8px;
+margin-top: 4px;
+}
+
+.btn-reset {
+display: block;
+flex: 1;
+padding: 14px;
+background: var(–surface);
+border: 1.5px solid var(–border);
+border-radius: var(–radius-sm);
+font-size: 15px;
+font-weight: 600;
+color: var(–text-secondary);
+cursor: pointer;
+font-family: inherit;
+transition: all 0.15s ease;
+text-align: center;
+}
+
+.btn-reset:active {
+background: var(–border);
+}
+
+.btn-back {
+display: block;
+flex: 1;
+padding: 14px;
+background: var(–surface);
+border: 1.5px solid var(–accent);
+border-radius: var(–radius-sm);
+font-size: 15px;
+font-weight: 600;
+color: var(–accent);
+cursor: pointer;
+font-family: inherit;
+transition: all 0.15s ease;
+text-align: center;
+}
+
+.btn-back:active {
+background: var(–accent-light);
+}
+
+/* History breadcrumb */
+.breadcrumb {
+font-size: 11px;
+color: var(–text-muted);
+background: var(–surface);
+border-radius: var(–radius-sm);
+padding: 8px 12px;
+margin-bottom: 12px;
+line-height: 1.6;
+box-shadow: var(–shadow);
+}
+
+.breadcrumb span {
+color: var(–accent);
+font-weight: 600;
+}
+
+/* Emergency */
+.emergency-card {
+background: var(–danger);
+color: white;
+border-radius: var(–radius);
+padding: 20px 16px;
+margin-bottom: 14px;
+box-shadow: var(–shadow-lg);
+animation: slideUp 0.25s ease;
+}
+
+.emergency-icon {
+font-size: 32px;
+margin-bottom: 10px;
+}
+
+.emergency-title {
+font-size: 20px;
+font-weight: 800;
+margin-bottom: 10px;
+line-height: 1.2;
+}
+
+.emergency-body {
+font-size: 14px;
+line-height: 1.6;
+background: rgba(0,0,0,0.15);
+border-radius: var(–radius-sm);
+padding: 12px;
+}
+
+/* Consult card */
+.consult-card {
+background: var(–purple);
+color: white;
+border-radius: var(–radius);
+padding: 16px;
+margin-bottom: 12px;
+animation: slideUp 0.25s ease;
+}
+
+.consult-card .result-label { color: rgba(255,255,255,0.75); }
+.consult-card .result-title { color: white; font-size: 17px; }
+.consult-card .result-body { color: rgba(255,255,255,0.9); font-size: 13px; }
+
+/* Step indicator */
+.step-indicator {
+display: flex;
+align-items: center;
+gap: 4px;
+margin-bottom: 12px;
+overflow-x: auto;
+padding-bottom: 2px;
+}
+
+.step-dot {
+width: 6px;
+height: 6px;
+border-radius: 50%;
+background: var(–border);
+flex-shrink: 0;
+transition: background 0.2s;
+}
+
+.step-dot.done { background: var(–accent); }
+.step-dot.current {
+background: var(–accent);
+width: 18px;
+border-radius: 3px;
+}
+
+/* Reference section */
+.ref-section {
+border-top: 2px dashed var(–border);
+padding-top: 12px;
+margin-top: 12px;
+}
+
+.ref-label {
+font-size: 11px;
+font-weight: 700;
+color: var(–text-muted);
+letter-spacing: 0.5px;
+margin-bottom: 8px;
+}
+
+.checklist {
+font-size: 13px;
+color: var(–text-secondary);
+line-height: 2;
+}
+
+.checklist li {
+list-style: none;
+padding-left: 4px;
+}
+
+.checklist li::before {
+content: “□ “;
+color: var(–text-muted);
+}
+
+/* Disclaimer */
+.disclaimer {
+font-size: 11px;
+color: var(–text-muted);
+background: var(–surface);
+border-radius: var(–radius-sm);
+padding: 10px 12px;
+line-height: 1.6;
+margin-top: 4px;
+border: 1px solid var(–border);
+}
+
+footer {
+text-align: center;
+font-size: 11px;
+color: var(–text-muted);
+padding: 18px 16px 28px;
+letter-spacing: 0.3px;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>💊 向精神薬 Assist</h1>
+  <p>処方フローチャート再現ツール（個人使用）</p>
+</header>
+
+<div class="container">
+  <div id="app"></div>
+</div>
+
+<footer>横浜ホームクリニック</footer>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  screen: 'symptom',   // symptom | questions | result
+  symptom: null,
+  answers: {},
+  history: [],
+  currentNode: null,
+  questionQueue: [],
+  currentQuestionIndex: 0,
+  result: null,
+};
+
+// ============================================================
+// SYMPTOMS
+// ============================================================
+const SYMPTOMS = [
+  { key: 'memory',        label: 'もの忘れ',       emoji: '🧠' },
+  { key: 'delusion',      label: '妄想',            emoji: '💭' },
+  { key: 'irritability',  label: '易怒性',          emoji: '😠' },
+  { key: 'anxiety',       label: '不安・焦燥感',    emoji: '😰' },
+  { key: 'apathy',        label: '意欲低下',        emoji: '😔' },
+  { key: 'insomnia',      label: '不眠',            emoji: '🌙' },
+  { key: 'depression',    label: '抑うつ',          emoji: '😢' },
+  { key: 'hallucination', label: '幻視・幻聴',      emoji: '👁️' },
+];
+
+// ============================================================
+// FLOW DEFINITIONS
+// Each flow returns either:
+//   { type: 'question', key, text, note, options }
+//   { type: 'result', data }
+//   { type: 'jump', to }   -- internal jump to another flow entry
+// ============================================================
+
+// ----- SHARED HELPER: Delusion extended flow (D3 onwards) -----
+// called from Delusion flow and other flows that reach "D3 logic"
+// context key prefix distinguishes delusion vs irritability etc.
+
+function delusionExtendedFlow(prefix, symptomLabel, answers) {
+  // Node D3/I4: Lexulti
+  if (!answers[prefix+'_lexulti_tried']) {
+    return {
+      type: 'result',
+      data: {
+        type: 'drug',
+        firstCandidate: 'レキサルティ',
+        doseInfo: '開始用量：0.5mg〜1mg / 最大：2mg',
+        reason: `${symptomLabel}が日常生活に支障あり。レキサルティを開始します。`,
+        nextStep: `2mgまで増量しても改善なし、または副作用で継続困難の場合は「効果不十分または副作用で継続困難」を選択してください。`,
+        nextQuestion: {
+          key: prefix+'_lexulti_tried',
+          text: 'レキサルティ（最大2mg）の効果はどうでしたか？',
+          options: [
+            { value: 'effective', label: '改善した ✓' },
+            { value: 'insufficient', label: '効果不十分または副作用で継続困難' },
+          ]
+        }
+      }
+    };
+  }
+  if (answers[prefix+'_lexulti_tried'] === 'effective') {
+    return {
+      type: 'result',
+      data: {
+        type: 'observation',
+        firstCandidate: 'レキサルティ継続',
+        reason: `レキサルティで${symptomLabel}が改善しています。`,
+        nextStep: '現在の処方を継続してください。',
+      }
+    };
+  }
+  // Insufficient → check DM
+  if (!answers[prefix+'_dm']) {
+    return {
+      type: 'question',
+      key: prefix+'_dm',
+      text: '糖尿病はありますか？',
+      options: [
+        { value: 'no', label: 'ない' },
+        { value: 'yes', label: 'ある' },
+      ]
+    };
+  }
+  const dm = answers[prefix+'_dm'];
+  if (dm === 'no') {
+    // check timing
+    if (!answers[prefix+'_timing']) {
+      return {
+        type: 'question',
+        key: prefix+'_timing',
+        text: '症状はいつ出ますか？',
+        options: [
+          { value: 'allday', label: '一日中症状がある' },
+          { value: 'partial', label: '特定の時間に目立つ' },
+        ]
+      };
+    }
+    const timing = answers[prefix+'_timing'];
+    if (timing === 'allday') {
+      if (!answers[prefix+'_olanzapine_tried']) {
+        return {
+          type: 'result',
+          data: {
+            type: 'drug',
+            firstCandidate: 'オランザピン',
+            doseInfo: '開始用量：2.5mg〜5mg / 最大：10mg',
+            reason: `糖尿病なし・一日中症状あり。オランザピンを開始します。`,
+            nextStep: `10mgまで増量しても改善なし、または副作用で継続困難の場合は次へ。`,
+            nextQuestion: {
+              key: prefix+'_olanzapine_tried',
+              text: 'オランザピン（最大10mg）の効果はどうでしたか？',
+              options: [
+                { value: 'effective', label: '改善した ✓' },
+                { value: 'insufficient', label: '効果不十分または副作用で継続困難' },
+              ]
+            }
+          }
+        };
+      }
+      if (answers[prefix+'_olanzapine_tried'] === 'effective') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: 'オランザピン継続', reason: 'オランザピンで改善しています。', nextStep: '現在の処方を継続。' } };
+      }
+      // → 糖尿病ありフローへ (ペロスピロン)
+      return perospirone_flow(prefix, symptomLabel, answers);
+    } else { // partial
+      if (!answers[prefix+'_quetiapine_tried']) {
+        return {
+          type: 'result',
+          data: {
+            type: 'drug',
+            firstCandidate: 'クエチアピン',
+            doseInfo: '開始用量：25mg〜50mg / 最大：200mg',
+            reason: `糖尿病なし・特定時間に症状あり。クエチアピンを開始します。`,
+            nextStep: `200mgまで増量しても改善なし、または副作用で継続困難の場合は次へ。`,
+            nextQuestion: {
+              key: prefix+'_quetiapine_tried',
+              text: 'クエチアピン（最大200mg）の効果はどうでしたか？',
+              options: [
+                { value: 'effective', label: '改善した ✓' },
+                { value: 'insufficient', label: '効果不十分または副作用で継続困難' },
+              ]
+            }
+          }
+        };
+      }
+      if (answers[prefix+'_quetiapine_tried'] === 'effective') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: 'クエチアピン継続', reason: 'クエチアピンで改善しています。', nextStep: '現在の処方を継続。' } };
+      }
+      return perospirone_flow(prefix, symptomLabel, answers);
+    }
+  } else { // dm === 'yes'
+    return perospirone_flow(prefix, symptomLabel, answers);
+  }
+}
+
+function perospirone_flow(prefix, symptomLabel, answers) {
+  if (!answers[prefix+'_pero_tried']) {
+    return {
+      type: 'result',
+      data: {
+        type: 'drug',
+        firstCandidate: 'ペロスピロン',
+        doseInfo: '開始用量：4mg〜8mg / 最大：24mg',
+        reason: `糖尿病あり（または非DM薬で改善なし）の場合。ペロスピロンを開始します。`,
+        nextStep: `24mgまで増量しても改善なし、または副作用で継続困難の場合は次へ。`,
+        nextQuestion: {
+          key: prefix+'_pero_tried',
+          text: 'ペロスピロン（最大24mg）の効果はどうでしたか？',
+          options: [
+            { value: 'effective', label: '改善した ✓' },
+            { value: 'insufficient', label: '効果不十分または副作用で継続困難' },
+          ]
+        }
+      }
+    };
+  }
+  if (answers[prefix+'_pero_tried'] === 'effective') {
+    return { type: 'result', data: { type: 'observation', firstCandidate: 'ペロスピロン継続', reason: 'ペロスピロンで改善しています。', nextStep: '現在の処方を継続。' } };
+  }
+  if (!answers[prefix+'_risperi_tried']) {
+    return {
+      type: 'result',
+      data: {
+        type: 'drug',
+        firstCandidate: 'リスペリドン',
+        doseInfo: '開始用量：0.5mg〜1mg / 最大：8mg',
+        reason: `ペロスピロンでも改善なし。リスペリドンを開始します。`,
+        nextStep: `8mgまで増量しても改善なし、または副作用で継続困難の場合は精神科コンサル。`,
+        nextQuestion: {
+          key: prefix+'_risperi_tried',
+          text: 'リスペリドン（最大8mg）の効果はどうでしたか？',
+          options: [
+            { value: 'effective', label: '改善した ✓' },
+            { value: 'insufficient', label: '効果不十分または副作用で継続困難' },
+          ]
+        }
+      }
+    };
+  }
+  if (answers[prefix+'_risperi_tried'] === 'effective') {
+    return { type: 'result', data: { type: 'observation', firstCandidate: 'リスペリドン継続', reason: 'リスペリドンで改善しています。', nextStep: '現在の処方を継続。' } };
+  }
+  return {
+    type: 'result',
+    data: {
+      type: 'consult',
+      specialty: '精神科',
+      reason: `リスペリドンまで試みたが改善なし、または継続困難。`,
+    }
+  };
+}
+
+// ============================================================
+// FLOW ENGINE
+// ============================================================
+function getNextStep(symptom, answers) {
+  switch (symptom) {
+
+    // ---- MEMORY ----
+    case 'memory': {
+      // Node M0: amyloid candidate check
+      if (answers['m_adl'] === undefined) {
+        return {
+          type: 'question', key: 'm_adl',
+          text: 'ADL（日常生活動作）は保たれていますか？',
+          options: [
+            { value: 'yes', label: 'はい（保たれている）' },
+            { value: 'no', label: 'いいえ（低下している）' },
+          ]
+        };
+      }
+      // MMSEはADL保持の場合のみ確認
+      if (answers['m_adl'] === 'yes' && answers['m_mmse'] === undefined) {
+        return {
+          type: 'question', key: 'm_mmse',
+          text: 'MMSE は 20点以上ですか？',
+          options: [
+            { value: 'yes', label: 'はい（20点以上）' },
+            { value: 'no', label: 'いいえ（20点未満）' },
+            { value: 'unknown', label: '未測定 / 不明' },
+          ]
+        };
+      }
+      // Amyloid candidate: ADL保持 かつ MMSE 20点以上
+      const amyloidCandidate = answers['m_adl'] === 'yes' && answers['m_mmse'] === 'yes';
+      if (answers['m_formulation'] === undefined) {
+        return {
+          type: 'question', key: 'm_formulation',
+          text: '内服形態の希望はどれですか？',
+          options: [
+            { value: 'oral', label: '内服（錠剤）' },
+            { value: 'liquid', label: '液剤' },
+            { value: 'patch', label: '貼付薬' },
+          ]
+        };
+      }
+      const formMap = { oral: 'ドネペジル', liquid: 'ガランタミン', patch: 'リバスチグミン' };
+      const formLabelMap = { oral: '内服', liquid: '液剤', patch: '貼付' };
+      const drug = formMap[answers['m_formulation']];
+      return {
+        type: 'result',
+        data: {
+          type: 'drug',
+          firstCandidate: drug,
+          reason: `選択した剤形（${formLabelMap[answers['m_formulation']] || ''}）に応じた抗認知症薬です。`,
+          nextStep: '開始後、効果・副作用を経過観察してください。',
+          amyloidNote: amyloidCandidate,
+        }
+      };
+    }
+
+    // ---- DELUSION ----
+    case 'delusion': {
+      if (answers['d_impairment'] === undefined) {
+        return {
+          type: 'question', key: 'd_impairment',
+          text: '妄想によって日常生活に支障がありますか？',
+          options: [
+            { value: 'no', label: 'ない' },
+            { value: 'yes', label: 'ある' },
+          ]
+        };
+      }
+      if (answers['d_impairment'] === 'no') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '経過観察', reason: '日常生活への支障なし。', nextStep: '定期的に症状を再評価してください。' } };
+      }
+      if (answers['d_type'] === undefined) {
+        return {
+          type: 'question', key: 'd_type',
+          text: '妄想のタイプはどれですか？',
+          options: [
+            { value: 'stealing', label: '物取られ妄想' },
+            { value: 'other', label: 'それ以外の妄想' },
+          ]
+        };
+      }
+      if (answers['d_type'] === 'stealing') {
+        // 抗認知症薬を使ったかどうか確認
+        if (answers['d_memory_status'] === undefined) {
+          return {
+            type: 'question', key: 'd_memory_status',
+            text: '抗認知症薬はすでに使用していますか？',
+            note: '物取られ妄想 → まず抗認知症薬の使用状況を確認します',
+            options: [
+              { value: 'not_tried', label: 'まだ使用していない' },
+              { value: 'using_improved', label: '使用中で妄想が改善した ✓' },
+              { value: 'using_not_improved', label: '使用中だが改善しない' },
+            ]
+          };
+        }
+        if (answers['d_memory_status'] === 'using_improved') {
+          return { type: 'result', data: { type: 'observation', firstCandidate: '抗認知症薬を継続', reason: 'もの忘れ治療で物取られ妄想が改善しています。', nextStep: '抗認知症薬を継続し、定期観察してください。' } };
+        }
+        if (answers['d_memory_status'] === 'not_tried') {
+          // → もの忘れフローの剤形選択へジャンプ（symptomをmemoryに切り替えて剤形選択から）
+          if (answers['m_formulation'] === undefined) {
+            return {
+              type: 'question', key: 'm_formulation',
+              text: '内服形態の希望はどれですか？',
+              note: '物取られ妄想 → まず抗認知症薬を開始します',
+              options: [
+                { value: 'oral',  label: '内服（錠剤）' },
+                { value: 'liquid', label: '液剤' },
+                { value: 'patch', label: '貼付薬' },
+              ]
+            };
+          }
+          const fMap = { oral: 'ドネペジル', liquid: 'ガランタミン', patch: 'リバスチグミン' };
+          const fLabelMap = { oral: '内服', liquid: '液剤', patch: '貼付' };
+          return {
+            type: 'result',
+            data: {
+              type: 'drug',
+              firstCandidate: fMap[answers['m_formulation']],
+              reason: `物取られ妄想 → 抗認知症薬（${fLabelMap[answers['m_formulation']]}）を開始します。`,
+              nextStep: '効果を観察し、妄想が改善しない場合はこのフローに戻り「使用中だが改善しない」を選択してください。',
+            }
+          };
+        }
+        // using_not_improved → fall through to D3
+      }
+      // D3: Lexulti and beyond
+      return delusionExtendedFlow('d', '妄想', answers);
+    }
+
+    // ---- IRRITABILITY ----
+    case 'irritability': {
+      if (answers['i_impairment'] === undefined) {
+        return {
+          type: 'question', key: 'i_impairment',
+          text: '易怒性によって日常生活に支障がありますか？',
+          options: [
+            { value: 'no', label: 'ない' },
+            { value: 'yes', label: 'ある' },
+          ]
+        };
+      }
+      if (answers['i_impairment'] === 'no') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '経過観察', reason: '日常生活への支障なし。', nextStep: '定期的に症状を再評価してください。' } };
+      }
+      // I2: 抑肝散
+      if (!answers['i_yokukansan_tried']) {
+        return {
+          type: 'result',
+          data: {
+            type: 'drug',
+            firstCandidate: '抑肝散',
+            doseInfo: '1包〜3包/日（分3）',
+            reason: '易怒性・日常生活支障あり。まず抑肝散を開始します。',
+            nextStep: '3包まで増量しても改善なし、または副作用で継続困難の場合は次へ。',
+            nextQuestion: {
+              key: 'i_yokukansan_tried',
+              text: '抑肝散（最大3包/日）の効果はどうでしたか？',
+              options: [
+                { value: 'effective', label: '改善した ✓' },
+                { value: 'insufficient', label: '効果不十分または副作用で継続困難' },
+              ]
+            }
+          }
+        };
+      }
+      if (answers['i_yokukansan_tried'] === 'effective') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '抑肝散継続', reason: '抑肝散で易怒性が改善しています。', nextStep: '現在の処方を継続。' } };
+      }
+      // I3: メマンチン
+      if (!answers['i_memantine_tried']) {
+        return {
+          type: 'result',
+          data: {
+            type: 'drug',
+            firstCandidate: 'メマンチン',
+            doseInfo: '5mg/日から開始、5mg/週ずつ漸増 / 最大：20mg',
+            reason: '抑肝散で改善なし。メマンチンを開始します。',
+            nextStep: '20mgまで増量しても改善なし、副作用で継続困難、または増量までの期間を待てない場合は次へ。',
+            nextQuestion: {
+              key: 'i_memantine_tried',
+              text: 'メマンチン（最大20mg）の効果はどうでしたか？',
+              options: [
+                { value: 'effective', label: '改善した ✓' },
+                { value: 'insufficient', label: '効果不十分・副作用・増量待てない' },
+              ]
+            }
+          }
+        };
+      }
+      if (answers['i_memantine_tried'] === 'effective') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: 'メマンチン継続', reason: 'メマンチンで易怒性が改善しています。', nextStep: '現在の処方を継続。' } };
+      }
+      // I4: Lexulti and beyond (same as delusion D3)
+      return delusionExtendedFlow('i', '易怒性', answers);
+    }
+
+    // ---- ANXIETY ----
+    case 'anxiety': {
+      if (answers['a_impairment'] === undefined) {
+        return {
+          type: 'question', key: 'a_impairment',
+          text: '不安・焦燥感によって日常生活に支障がありますか？',
+          options: [
+            { value: 'no', label: 'ない' },
+            { value: 'yes', label: 'ある' },
+          ]
+        };
+      }
+      if (answers['a_impairment'] === 'no') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '経過観察・傾聴', reason: '日常生活への支障なし。', nextStep: '傾聴を中心に対応し、定期的に再評価してください。' } };
+      }
+      // A2: 傾聴・環境調整
+      if (answers['a_env_adjusted'] === undefined) {
+        return {
+          type: 'question', key: 'a_env_adjusted',
+          text: '傾聴・環境調整を行いましたか？改善しましたか？',
+          note: '環境調整：生活リズム、居場所、ケアの見直し等',
+          options: [
+            { value: 'improved', label: '改善した ✓' },
+            { value: 'not_improved', label: '改善しない' },
+            { value: 'not_tried', label: 'まだ行っていない' },
+          ]
+        };
+      }
+      if (answers['a_env_adjusted'] === 'improved') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '環境調整継続', reason: '傾聴・環境調整で改善しています。', nextStep: '現在の対応を継続してください。' } };
+      }
+      if (answers['a_env_adjusted'] === 'not_tried') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '傾聴・環境調整を実施', reason: '薬物療法の前にまず傾聴・環境調整を行ってください。', nextStep: '改善しない場合はこのフローに戻り「改善しない」を選択してください。' } };
+      }
+      // A3: timing
+      if (answers['a_timing'] === undefined) {
+        return {
+          type: 'question', key: 'a_timing',
+          text: '不安・焦燥感はいつ生じますか？',
+          options: [
+            { value: 'specific', label: '特定のタイミングのみ' },
+            { value: 'constant', label: '常に生じている' },
+          ]
+        };
+      }
+      if (answers['a_timing'] === 'specific') {
+        return {
+          type: 'result',
+          data: {
+            type: 'drug',
+            firstCandidate: 'ロラゼパム 0.5mg 頓服',
+            reason: '特定のタイミングのみ不安・焦燥感あり。ロラゼパム頓服を処方します。',
+            nextStep: '頓服として使用し、効果・依存性に注意して観察してください。',
+          }
+        };
+      }
+      // constant → メイラックス
+      if (!answers['a_meillax_tried']) {
+        return {
+          type: 'result',
+          data: {
+            type: 'drug',
+            firstCandidate: 'メイラックス',
+            doseInfo: '1mg〜2mg/日 / 最大：2mg',
+            reason: '常に不安・焦燥感あり。メイラックスを開始します。',
+            nextStep: '2mgまで増量しても改善なし、または副作用で継続困難の場合は精神科コンサル。',
+            nextQuestion: {
+              key: 'a_meillax_tried',
+              text: 'メイラックス（最大2mg）の効果はどうでしたか？',
+              options: [
+                { value: 'effective', label: '改善した ✓' },
+                { value: 'insufficient', label: '効果不十分または副作用で継続困難' },
+              ]
+            }
+          }
+        };
+      }
+      if (answers['a_meillax_tried'] === 'effective') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: 'メイラックス継続', reason: 'メイラックスで改善しています。', nextStep: '現在の処方を継続。' } };
+      }
+      return {
+        type: 'result',
+        data: {
+          type: 'consult',
+          specialty: '精神科',
+          reason: 'メイラックス最大量でも改善なし、または継続困難。',
+        }
+      };
+    }
+
+    // ---- APATHY ----
+    case 'apathy': {
+      // → もの忘れフローへ
+      if (answers['ap_memory_improved'] === undefined) {
+        return {
+          type: 'question', key: 'ap_memory_improved',
+          text: 'もの忘れの治療（抗認知症薬）を行いましたか？改善しましたか？',
+          note: '意欲・食欲低下 → まずもの忘れフロー（抗認知症薬）を優先します',
+          options: [
+            { value: 'improved', label: '治療して改善した ✓' },
+            { value: 'not_improved', label: '治療したが改善しない' },
+            { value: 'not_tried', label: 'まだ試みていない' },
+          ]
+        };
+      }
+      if (answers['ap_memory_improved'] === 'improved') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '抗認知症薬継続', reason: 'もの忘れ治療で意欲・食欲低下が改善しています。', nextStep: '抗認知症薬を継続してください。' } };
+      }
+      if (answers['ap_memory_improved'] === 'not_tried') {
+        return { type: 'result', data: { type: 'drug', firstCandidate: '抗認知症薬（もの忘れフロー参照）', reason: '意欲・食欲低下はまずもの忘れ治療から試みます。', nextStep: 'もの忘れフローを参照して抗認知症薬を開始してください。', note: '改善しない場合は精神科コンサルへ。' } };
+      }
+      return {
+        type: 'result',
+        data: {
+          type: 'consult',
+          specialty: '精神科',
+          reason: 'もの忘れ治療でも意欲・食欲低下の改善なし。',
+        }
+      };
+    }
+
+    // ---- DIRECT CONSULT ----
+    case 'depression':
+      return { type: 'result', data: { type: 'consult', specialty: '精神科', reason: '抑うつは精神科コンサルを行います。' } };
+    case 'hallucination':
+      return { type: 'result', data: { type: 'consult', specialty: '精神科', reason: '幻視・幻聴は精神科コンサルを行います。' } };
+
+    // ---- INSOMNIA ----
+    case 'insomnia': {
+      if (answers['s_env_adjusted'] === undefined) {
+        return {
+          type: 'question', key: 's_env_adjusted',
+          text: '環境調整を行いましたか？改善しましたか？',
+          note: '環境調整：昼寝をしない／カフェインをやめる／アルコールを減らす／寝る前の光刺激を減らす',
+          options: [
+            { value: 'improved', label: '改善した ✓' },
+            { value: 'not_improved', label: '改善しない' },
+            { value: 'not_tried', label: 'まだ行っていない' },
+          ]
+        };
+      }
+      if (answers['s_env_adjusted'] === 'improved') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '環境調整継続', reason: '環境調整で不眠が改善しています。', nextStep: '環境調整を継続してください。' } };
+      }
+      if (answers['s_env_adjusted'] === 'not_tried') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: '環境調整を実施', reason: '薬物療法の前に環境調整を行ってください。', nextStep: '①昼寝をしない ②カフェインをやめる ③アルコールを減らす ④寝る前の光刺激を減らす。改善しない場合はこのフローへ戻り「改善しない」を選択してください。' } };
+      }
+      // デエビゴ
+      if (!answers['s_dayvigo_tried']) {
+        return {
+          type: 'result',
+          data: {
+            type: 'drug',
+            firstCandidate: 'デエビゴ',
+            doseInfo: '5mg〜10mg（就寝直前）',
+            reason: '環境調整で改善なし。デエビゴを開始します。',
+            nextStep: '効果・副作用（中途覚醒・翌日の眠気）を観察してください。',
+            nextQuestion: {
+              key: 's_dayvigo_tried',
+              text: 'デエビゴ開始後の状況はどうですか？',
+              options: [
+                { value: 'effective', label: '改善した ✓' },
+                { value: 'midawake', label: '中途覚醒が目立つ' },
+                { value: 'hangover', label: '翌日に眠気を持ち越す' },
+                { value: 'other_bad', label: 'その他の理由で継続困難' },
+              ]
+            }
+          }
+        };
+      }
+      if (answers['s_dayvigo_tried'] === 'effective') {
+        return { type: 'result', data: { type: 'observation', firstCandidate: 'デエビゴ継続', reason: 'デエビゴで改善しています。', nextStep: '現在の処方を継続。' } };
+      }
+      if (answers['s_dayvigo_tried'] === 'midawake') {
+        return { type: 'result', data: { type: 'drug', firstCandidate: 'ベルソムラ', doseInfo: '15mg〜20mg（就寝直前）', reason: 'デエビゴで中途覚醒が目立つ場合はベルソムラへ変更。', nextStep: '効果・副作用を観察してください。改善しない場合は精神科コンサル。' } };
+      }
+      if (answers['s_dayvigo_tried'] === 'hangover') {
+        return { type: 'result', data: { type: 'drug', firstCandidate: 'クービビック', doseInfo: '用量：要確認（添付文書参照）', reason: 'デエビゴで翌日眠気を持ち越す場合はクービビックへ変更。', nextStep: '効果・副作用を観察してください。改善しない場合は精神科コンサル。' } };
+      }
+      // other_bad or further
+      return {
+        type: 'result',
+        data: {
+          type: 'consult',
+          specialty: '精神科',
+          reason: 'デエビゴで改善なし、または継続困難。',
+        }
+      };
+    }
+
+    default:
+      return { type: 'result', data: { type: 'observation', firstCandidate: '要確認', reason: 'このフローは未定義です。', nextStep: '要確認' } };
+  }
+}
+
+// ============================================================
+// RENDER ENGINE
+// ============================================================
+function render() {
+  const app = document.getElementById('app');
+  if (state.screen === 'symptom') {
+    renderSymptomSelect(app);
+  } else if (state.screen === 'questions') {
+    renderQuestions(app);
+  } else if (state.screen === 'emergency') {
+    renderEmergency(app);
+  }
+}
+
+function renderSymptomSelect(app) {
+  const html = `
+    <div class="card" style="margin-top:8px;">
+      <div class="card-header">
+        <div class="card-tag">Step 1</div>
+        <div class="card-question">まず自傷他害の有無を確認します</div>
+      </div>
+      <div class="card-body">
+        <div class="btn-group">
+          <button class="btn-option" onclick="handleSelfHarm('yes')">
+            <span class="icon">⚠️</span>自傷他害のおそれがある
+          </button>
+          <button class="btn-option" onclick="handleSelfHarm('no')">
+            <span class="icon">✓</span>自傷他害のおそれはない
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="disclaimer">
+      ⚠️ このツールは個人の処方ロジックを補助するものです。診断・処方の最終判断は医師が行ってください。
+    </div>
+  `;
+  app.innerHTML = html;
+}
+
+function handleSelfHarm(val) {
+  if (val === 'yes') {
+    state.screen = 'emergency';
+    render();
+    return;
+  }
+  state.selfHarmAnswered = true;
+  showSymptomGrid();
+}
+
+function showSymptomGrid() {
+  const app = document.getElementById('app');
+  const symptomHtml = `
+    <div class="card" style="margin-top:8px;">
+      <div class="card-header">
+        <div class="card-tag">Step 2</div>
+        <div class="card-question">主症状を選んでください</div>
+      </div>
+      <div class="card-body">
+        <div class="symptom-grid">
+          ${SYMPTOMS.map(s => `
+            <button class="btn-symptom" onclick="selectSymptom('${s.key}')">
+              <span class="emoji">${s.emoji}</span>
+              ${s.label}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="btn-footer-row">
+      <button class="btn-back" onclick="resetAll()">◀ 一つ前に戻る</button>
+      <button class="btn-reset" onclick="resetAll()">🔄 最初から</button>
+    </div>
+    <div class="disclaimer">
+      ⚠️ このツールは個人の処方ロジックを補助するものです。診断・処方の最終判断は医師が行ってください。
+    </div>
+  `;
+  app.innerHTML = symptomHtml;
+}
+
+function selectSymptom(key) {
+  state.symptom = key;
+  state.answers = {};
+  state.history = [];
+  undoStack = [];
+  state.screen = 'questions';
+  processNextStep();
+}
+
+function footerButtons(showBack) {
+  if (showBack) {
+    return `
+      <div class="btn-footer-row">
+        <button class="btn-back" onclick="goBack()">◀ 一つ前に戻る</button>
+        <button class="btn-reset" onclick="resetAll()">🔄 最初から</button>
+      </div>
+    `;
+  }
+  return `<button class="btn-reset" onclick="resetAll()">🔄 最初からやり直す</button>`;
+}
+
+function processNextStep() {
+  const step = getNextStep(state.symptom, state.answers);
+  if (step.type === 'question') {
+    renderQuestion(step);
+  } else if (step.type === 'result') {
+    renderResult(step.data);
+  }
+}
+
+function renderQuestion(q) {
+  const app = document.getElementById('app');
+  const symptomLabel = SYMPTOMS.find(s => s.key === state.symptom)?.label || '';
+
+  // Build history text
+  const historyText = state.history.map(h => `${h.q}: <span>${h.a}</span>`).join(' → ');
+
+  app.innerHTML = `
+    ${state.history.length > 0 ? `<div class="breadcrumb">📍 ${symptomLabel} ${historyText.length > 0 ? '→ ' + historyText : ''}</div>` : ''}
+    <div class="card">
+      <div class="card-header">
+        <div class="card-tag">確認事項</div>
+        <div class="card-question">${q.text}</div>
+        ${q.note ? `<div class="card-note">💡 ${q.note}</div>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="btn-group">
+          ${q.options.map(opt => `
+            <button class="btn-option" onclick="answerQuestion('${q.key}', '${opt.value}', '${q.text.replace(/'/g,"\\'")}', '${opt.label.replace(/'/g,"\\'")}')">
+              ${opt.label}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+    ${footerButtons(true)}
+  `;
+}
+
+function answerQuestion(key, value, qText, aLabel) {
+  // Save snapshot for undo
+  undoStack.push({
+    answers: Object.assign({}, state.answers),
+    history: state.history.slice(),
+  });
+  state.answers[key] = value;
+  // Truncate texts for breadcrumb
+  const shortQ = qText.length > 15 ? qText.substring(0, 15) + '…' : qText;
+  const shortA = aLabel.length > 10 ? aLabel.substring(0, 10) + '…' : aLabel;
+  state.history.push({ q: shortQ, a: shortA });
+  processNextStep();
+}
+
+function goBack() {
+  if (undoStack.length === 0) {
+    // 症状選択画面に戻る
+    state.symptom = null;
+    state.answers = {};
+    state.history = [];
+    state.screen = 'symptom';
+    showSymptomGrid();
+    return;
+  }
+  const snapshot = undoStack.pop();
+  state.answers = snapshot.answers;
+  state.history = snapshot.history;
+  processNextStep();
+}
+
+function renderResult(data) {
+  const app = document.getElementById('app');
+  const symptomLabel = SYMPTOMS.find(s => s.key === state.symptom)?.label || '';
+  const historyText = state.history.map(h => `${h.q}: <span>${h.a}</span>`).join(' → ');
+
+  let resultHtml = '';
+
+  if (data.type === 'drug') {
+    resultHtml = `
+      <div class="result-card primary">
+        <div class="result-label">第一候補</div>
+        <div class="drug-name">${data.firstCandidate}</div>
+        ${data.doseInfo ? `<div class="drug-dose">${data.doseInfo}</div>` : ''}
+        <div class="result-divider"></div>
+        <div class="result-body">
+          <div class="info-row"><span class="info-icon">💡</span><span class="info-text">${data.reason}</span></div>
+          <div class="info-row"><span class="info-icon">→</span><span class="info-text">${data.nextStep}</span></div>
+          ${data.note ? `<div class="info-row"><span class="info-icon">⚠️</span><span class="info-text">${data.note}</span></div>` : ''}
+        </div>
+      </div>
+      ${data.amyloidNote ? `
+        <div class="result-card purple">
+          <div class="result-label">優先確認</div>
+          <div class="result-title">神経内科コンサルを検討</div>
+          <div class="result-body">
+            <div class="info-row"><span class="info-icon">🔬</span><span class="info-text">ADL保持・MMSE 20点以上のため、抗アミロイド薬（レカネマブ等）の適応を神経内科に相談してください。</span></div>
+          </div>
+        </div>
+      ` : ''}
+    `;
+    // If there's a nextQuestion embedded, show it below
+    if (data.nextQuestion) {
+      resultHtml += `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-tag">次の確認</div>
+            <div class="card-question">${data.nextQuestion.text}</div>
+          </div>
+          <div class="card-body">
+            <div class="btn-group">
+              ${data.nextQuestion.options.map(opt => `
+                <button class="btn-option" onclick="answerQuestion('${data.nextQuestion.key}', '${opt.value}', '${data.nextQuestion.text.replace(/'/g,"\\'")}', '${opt.label.replace(/'/g,"\\'")}')">
+                  ${opt.label}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  } else if (data.type === 'observation') {
+    resultHtml = `
+      <div class="result-card success">
+        <div class="result-label">対応方針</div>
+        <div class="result-title">${data.firstCandidate}</div>
+        <div class="result-body">
+          <div class="info-row"><span class="info-icon">💡</span><span class="info-text">${data.reason}</span></div>
+          <div class="info-row"><span class="info-icon">→</span><span class="info-text">${data.nextStep}</span></div>
+        </div>
+      </div>
+    `;
+  } else if (data.type === 'consult') {
+    resultHtml = `
+      <div class="consult-card">
+        <div class="result-label">コンサル依頼</div>
+        <div class="result-title">🏥 ${data.specialty}コンサル</div>
+        <div class="result-body">
+          <div class="info-row" style="border-color:rgba(255,255,255,0.2)"><span class="info-icon">💡</span><span class="info-text">${data.reason}</span></div>
+          <div class="info-row" style="border-color:rgba(255,255,255,0.2)"><span class="info-icon">→</span><span class="info-text">${data.specialty}への紹介状を作成し、専門医に引き継いでください。</span></div>
+        </div>
+      </div>
+    `;
+  }
+
+  app.innerHTML = `
+    ${state.history.length > 0 ? `<div class="breadcrumb">📍 ${symptomLabel} → ${historyText}</div>` : ''}
+    ${resultHtml}
+    ${footerButtons(undoStack.length > 0)}
+    <div class="disclaimer">
+      ⚠️ このツールは個人の処方ロジックを補助するものです。診断・処方の最終判断は医師が行ってください。
+    </div>
+  `;
+}
+
+function renderEmergency(app) {
+  app.innerHTML = `
+    <div class="emergency-card">
+      <div class="emergency-icon">🚨</div>
+      <div class="emergency-title">緊急対応</div>
+      <div class="emergency-body">
+        自傷他害のおそれがあるため、<strong>家族から110番通報</strong>してもらい、警察官通報を契機に<strong>措置入院も視野に対応</strong>してください。
+        <br><br>
+        ⚠️ 通常フローは終了です。安全対応を最優先してください。
+      </div>
+    </div>
+    <button class="btn-reset" onclick="resetAll()">🔄 最初からやり直す</button>
+    <div class="disclaimer">
+      ⚠️ このツールは個人の処方ロジックを補助するものです。診断・処方の最終判断は医師が行ってください。
+    </div>
+  `;
+}
+
+function resetAll() {
+  state = {
+    screen: 'symptom',
+    symptom: null,
+    answers: {},
+    history: [],
+    currentNode: null,
+    result: null,
+  };
+  undoStack = [];
+  render();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+let undoStack = [];
+render();
+</script>
+
+</body>
+</html>
